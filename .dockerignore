@@ -1,0 +1,9 @@
+# .dockerignore
+.env
+Projet+Mise+en+prod+-+home-credit-default-risk/
+OUTPUT_DATA/
+INPUT_DATA/
+IMAGES/
+mlflow_model_LightGBM/
+model/
+model_LGBM02/
