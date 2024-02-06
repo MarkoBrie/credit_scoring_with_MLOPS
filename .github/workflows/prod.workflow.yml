@@ -31,15 +31,15 @@ jobs:
      
     - name: Build and push container image to registry 
       run: |
-        docker build . -t fastapicd.azurecr.io/fastapi-cd:${{ github.sha }}
-        docker push fastapicd.azurecr.io/fastapi-cd:${{ github.sha }}
+        docker build . -t fastapicd2024.azurecr.io/fastapi-cd:${{ github.sha }}
+        docker push fastapicd2024.azurecr.io/fastapi-cd:${{ github.sha }}
         
         
     - name: Deploy to App Service
       uses: azure/webapps-deploy@v2
       with:
         app-name: 'fastapi-cd'
-        images: 'fastapicd.azurecr.io/fastapi-cd:${{ github.sha }}'
+        images: 'fastapicd2024.azurecr.io/fastapi-cd:${{ github.sha }}'
         slot-name: 'staging'
         
         
