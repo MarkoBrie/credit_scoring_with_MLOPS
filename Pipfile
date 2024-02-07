@@ -8,6 +8,7 @@ fastapi = "*"
 uvicorn = "*"
 typing-extensions = "*"
 click = "*"
+streamlit = "*"
 
 [dev-packages]
 
