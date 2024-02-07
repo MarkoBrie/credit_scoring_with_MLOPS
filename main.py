@@ -1,7 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 import os
-import streamlit as st
+#import streamlit as st
 
 # load environment variables
 port = os.environ["PORT"]

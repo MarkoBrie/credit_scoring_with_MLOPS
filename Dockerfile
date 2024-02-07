@@ -15,7 +15,7 @@ RUN pip install pipenv
 RUN pip install uvicorn
 RUN pip install fastapi
 #RUN pip install streamlit
-RUN pipenv install --system --deploy --ignore-pipfile
+#RUN pipenv install --system --deploy --ignore-pipfile
 
 # expose the port that uvicorn will run the app on
 ENV PORT=8000
