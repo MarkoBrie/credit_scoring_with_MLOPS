@@ -1,0 +1,21 @@
+flavors:
+  lightgbm:
+    code: null
+    data: model.pkl
+    lgb_version: 4.1.0
+    model_class: lightgbm.sklearn.LGBMClassifier
+  python_function:
+    data: model.pkl
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.lightgbm
+    python_version: 3.8.8
+mlflow_version: 2.9.2
+model_size_bytes: 35311756
+model_uuid: e8aca8347dd54e24a29f0c7ce354080c
+signature:
+  inputs: '[{"type": "tensor", "tensor-spec": {"dtype": "object", "shape": [-1, 239]}}]'
+  outputs: '[{"type": "long", "name": "TARGET"}]'
+  params: null
+utc_time_created: '2024-01-31 13:00:18.580954'

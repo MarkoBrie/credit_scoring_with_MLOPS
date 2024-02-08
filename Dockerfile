@@ -1,10 +1,11 @@
 # python base image in the container from Docker Hub
-FROM python:3.7.9-slim
+FROM python:3.8-bookworm
 
 # copy files to the /app folder in the container
 COPY ./main.py /app/main.py
 COPY ./Pipfile /app/Pipfile
 COPY ./Pipfile.lock /app/Pipfile.lock
+COPY ./LightGBM/ /app/LightGBM/
 
 # set the working directory in the container to be /app
 WORKDIR /app
@@ -14,6 +15,9 @@ RUN pip install pipenv
 # Install uvicorn
 RUN pip install uvicorn
 RUN pip install fastapi
+RUN pip install mlflow
+RUN pip install lightgbm 
+#RUN pip install cloudpickle
 #RUN pip install streamlit
 #RUN pipenv install --system --deploy --ignore-pipfile
 

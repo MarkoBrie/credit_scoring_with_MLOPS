@@ -9,6 +9,8 @@ uvicorn = "*"
 typing-extensions = "*"
 click = "*"
 streamlit = "*"
+mlflow = "2.9.2"
+lightgbm = "4.1.0"
 
 [dev-packages]
 
