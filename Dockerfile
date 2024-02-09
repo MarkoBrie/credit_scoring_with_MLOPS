@@ -18,7 +18,7 @@ RUN pip install fastapi
 RUN pip install mlflow
 RUN pip install lightgbm 
 #RUN pip install cloudpickle
-#RUN pip install streamlit
+RUN pip install streamlit
 #RUN pipenv install --system --deploy --ignore-pipfile
 
 # expose the port that uvicorn will run the app on
