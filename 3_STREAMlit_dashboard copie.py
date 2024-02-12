@@ -24,19 +24,15 @@ def request_prediction(model_uri, data):
 
 
 def main():
-    #MLFLOW_URI = 'http://127.0.0.1:8099/invocations'
-    MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
+    MLFLOW_URI = 'http://127.0.0.1:8099/invocations'
     CORTEX_URI = 'http://0.0.0.0:8890/'
     RAY_SERVE_URI = 'http://127.0.0.1:8000/regressor'
 
     api_choice = st.sidebar.selectbox(
         'Quelle API souhaitez vous utiliser',
-        ['MLflow', 'Option 2', 'Option 3'])
+        ['MLflow', 'Cortex', 'Ray Serve'])
 
     st.title('Median House Price Prediction')
-
-    selected_radio = st.radio('Select an option', ['Option 1', 'Option 2', 'Option 3'])
-
 
     revenu_med = st.number_input('Revenu médian dans le secteur (en 10K de dollars)',
                                  min_value=0., value=3.87, step=1.)
@@ -77,18 +73,14 @@ def main():
 
         if api_choice == 'MLflow':
             st.write(MLFLOW_URI)
-            #st.write(data)
+            st.write(data)
             pred = request_prediction(MLFLOW_URI, data)#[0] * 100000
-            st.write(pred)
-            st.write(pred["prediction"])
         elif api_choice == 'Cortex':
             pred = request_prediction(CORTEX_URI, data)[0] * 100000
         elif api_choice == 'Ray Serve':
             pred = request_prediction(RAY_SERVE_URI, data)[0] * 100000
         st.write(
-            'Le prix médian d\'une habitation est de {:.2f}'.format(pred["prediction"]))
-            #'Le prix médian d\'une habitation est de {:.2f}'.format(pred["prediction"][0]))
-        
+            'Le prix médian d\'une habitation est de {:.2f}'.format(pred["predictions"][0]))
   
 
 
