@@ -1,12 +1,12 @@
 import uvicorn
 from fastapi import FastAPI
+import numpy as np
 #import pickle # pipfile does not lock
 import mlflow
 import lightgbm
 import os
-#import streamlit as st
-#import cloudpickle
-#import pickle
+from typing import List
+from pydantic import BaseModel # for data validation
 
 # load environment variables
 port = os.environ["PORT"]
@@ -17,26 +17,36 @@ app = FastAPI(title="Automatic Credit Scoring",
                            Visit this URL at port 8501 for the streamlit interface.''',
               version="0.1.0",)
 
-# Path to the .pkl file containing the serialized model
-#model_file_path = "model.pkl"
-
-# Load the model from the .pkl file
-#with open(model_file_path, 'rb') as f:
- #   model = pickle.load(f)
+# Pydantic model for the input data
+class DataPoint(BaseModel):
+    data_point: List[float]
 
 # 3. Expose the prediction functionality, make a prediction from the passed
 #    JSON data and return the predicted flower species with the confidence
 @app.post('/predict')
-def predict_credit_score():
+def predict_credit_score(data: DataPoint):
+
+    print("predict_credit_score function")
+    #print(data)
+    print([data.data_point])
+
+    #if len(data) != 239:
+    #    raise HTTPException(status_code=400, detail="Expected 239 data points")
+    
+    #data_point = {"data_point": data_point}
+
+    #data_point = np.array(data_point) #.reshape(1, -1)
 
     sklearn_pyfunc = mlflow.lightgbm.load_model(model_uri="LightGBM")
-    data = [[0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]]
+    #data = [[0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]]
+ 
+    prediction = sklearn_pyfunc.predict_proba([data.data_point]).max()
+    #print(prediction)
+    #prediction = 0.7
 
-    prediction = sklearn_pyfunc.predict_proba(data).max()
-    print(prediction)
     return {
         'prediction': prediction,
-        'probability': 0.9
+        'probability': 0.8
     }
 
 @app.get("/")
