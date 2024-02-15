@@ -2,15 +2,11 @@ import pandas as pd
 import streamlit as st
 import requests
 
-
-
 def request_prediction(model_uri, data):
     headers = {"Content-Type": "application/json"}
     st.write(data)
-    #data_json = {'data': data}
     data_json = data
-    
-    #data_json = {'dataframe_split': data.to_dict(orient='records')}
+
     st.write(data_json)
     
     response = requests.request(
@@ -21,13 +17,11 @@ def request_prediction(model_uri, data):
             "Request failed with status {}, {}".format(response.status_code, response.text))
 
     return response.json()
-
+#load id_test file
+#
 
 def main():
-    #MLFLOW_URI = 'http://127.0.0.1:8099/invocations'
     MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
-    CORTEX_URI = 'http://0.0.0.0:8890/'
-    RAY_SERVE_URI = 'http://127.0.0.1:8000/regressor'
 
     api_choice = st.sidebar.selectbox(
         'Quelle API souhaitez vous utiliser',
@@ -37,30 +31,14 @@ def main():
 
     selected_radio = st.radio('Select an option', ['Option 1', 'Option 2', 'Option 3'])
 
+    # List of IDs
+    id_list = ['100002', '100003', '100004', '100005', '100006', '100007', '100008', '100009']
+
+    selected_id = st.selectbox('Search and select an ID', options=id_list, index=0, format_func=lambda x: x if x else 'Search...')
+    #get selected_id index in ids_test and use the index to get the data
 
     revenu_med = st.number_input('Revenu médian dans le secteur (en 10K de dollars)',
                                  min_value=0., value=3.87, step=1.)
-
-    age_med = st.number_input('Âge médian des maisons dans le secteur',
-                              min_value=0., value=28., step=1.)
-
-    nb_piece_med = st.number_input('Nombre moyen de pièces',
-                                   min_value=0., value=5., step=1.)
-
-    nb_chambre_moy = st.number_input('Nombre moyen de chambres',
-                                     min_value=0., value=1., step=1.)
-
-    taille_pop = st.number_input('Taille de la population dans le secteur',
-                                 min_value=0, value=1425, step=100)
-
-    occupation_moy = st.number_input('Occupation moyenne de la maison (en nombre d\'habitants)',
-                                     min_value=0., value=3., step=1.)
-
-    latitude = st.number_input('Latitude du secteur',
-                               value=35., step=1.)
-
-    longitude = st.number_input('Longitude du secteur',
-                                value=-119., step=1.)
 
     predict_btn = st.button('Prédire')
     if predict_btn:
