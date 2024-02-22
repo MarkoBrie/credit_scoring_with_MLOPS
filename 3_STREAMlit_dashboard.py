@@ -21,10 +21,8 @@ def request_prediction(model_uri, data):
 #
 
 def main():
-    #MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
-    MLFLOW_URI = 'http://0.0.0.0:8000/predict'
-
-     
+    MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
+    #MLFLOW_URI = 'http://0.0.0.0:8000/predict'
 
     api_choice = st.sidebar.selectbox(
         'Quelle API souhaitez vous utiliser',
