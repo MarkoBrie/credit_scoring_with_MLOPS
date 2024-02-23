@@ -22,5 +22,5 @@ jobs:
         pip install -r requirements.txt
       
     - name : Run tests 
-      run : pytest 5_unittest.py
+      run : pytest 5_unittest.py -v -s --disable-warnings
       
