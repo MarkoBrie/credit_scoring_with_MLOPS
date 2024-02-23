@@ -14,10 +14,11 @@ jobs:
       uses : actions/checkout@main
       
     - name : Install Packages 
-      run : pip install pytest
-      run : pip install requests
-      run : pip install fastapi
-      run : pip install httpx
+      run : |
+        pip install pytest
+        pip install requests
+        pip install fastapi
+        pip install httpx
       
     - name : Run tests 
       run : pytest 5_unittest.py
