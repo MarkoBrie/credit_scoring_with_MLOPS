@@ -15,6 +15,9 @@ jobs:
       
     - name : Install Packages 
       run : pip install pytest
+      run : pip install requests
+      run : pip install fastapi
+      run : pip install httpx
       
     - name : Run tests 
       run : pytest 5_unittest.py
