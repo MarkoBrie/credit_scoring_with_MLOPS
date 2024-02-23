@@ -15,10 +15,8 @@ jobs:
       
     - name : Install Packages 
       run : |
-        pip install pytest
-        pip install requests
-        pip install fastapi
-        pip install httpx
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
       
     - name : Run tests 
       run : pytest 5_unittest.py
