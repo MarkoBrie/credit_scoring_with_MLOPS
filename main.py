@@ -8,8 +8,8 @@ from typing import List
 from pydantic import BaseModel # for data validation
 
 # load environment variables
-port = os.environ["PORT"]
-
+#port = os.environ["PORT"]
+port = 8000
 # initialize FastAPI
 app = FastAPI(title="Automatic Credit Scoring",
               description='''Obtain a credit score (0,1) for ClientID.
