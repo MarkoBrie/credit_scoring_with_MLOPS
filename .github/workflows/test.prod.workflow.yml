@@ -1,0 +1,21 @@
+name: Push Test Workflow
+
+on: 
+    push:
+        branches: 
+            - main
+
+jobs:
+  unit-testing:
+    runs-on: ubuntu-latest 
+    
+    steps:
+    - name : Checkout code
+      uses : actions/checkout@main
+      
+    - name : Install Packages 
+      run : pip install pytest
+      
+    - name : Run tests 
+      run : pytest 5_unittest.py
+      
