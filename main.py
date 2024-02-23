@@ -1,7 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, HTTPException
 import numpy as np
-#import pickle # pipfile does not lock
 import mlflow
 import lightgbm
 import os
