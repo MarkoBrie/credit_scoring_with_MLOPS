@@ -8,7 +8,9 @@ from typing import List
 from pydantic import BaseModel # for data validation
 
 # load environment variables
-port = os.environ["PORT"]
+#port = os.environ["PORT"]
+# hard coded port to facilitate testing with Github Actions
+port = 8000
 
 # initialize FastAPI
 app = FastAPI(title="Automatic Credit Scoring",
