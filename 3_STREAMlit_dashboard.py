@@ -7,7 +7,7 @@ def request_prediction(model_uri, data):
 
     data_json = data
 
-    st.write(data_json)
+    #st.write(data_json)
     
     response = requests.request(
         method='POST', headers=headers, url=model_uri, json=data_json)
@@ -60,13 +60,14 @@ def main():
     st.write(X_train.loc[selected_id].values.tolist())
     st.write(X_train.info())
     data =  { "data_point":X_train.loc[selected_id].values.tolist()}
-    st.write(data)
+    #st.write(data)
 
     predict_btn = st.button('Prédire')
     if predict_btn:
-        
-        
-        st.write(data)
+        """
+        function that sends data to a model API and depicts the result
+        """
+        #st.write(data)
         st.write("after")
         lst = [0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
     
@@ -79,11 +80,12 @@ def main():
         st.write(MLFLOW_URI)
         #st.write(data)
         pred = request_prediction(MLFLOW_URI, data)#[0] * 100000
-        st.write(pred)
-        st.write(pred["prediction"])
+        score = 0 if pred["prediction"] < 0.2 else 1
+        #st.write(pred)
+        st.write(pred["prediction"], " -> score ", score)
 
         st.write(
-            'Le score crédit est de {:.2f}'.format(pred["prediction"]))
+            'Le score crédit est de {:.2f}'.format(score))
             
 
 if __name__ == '__main__':

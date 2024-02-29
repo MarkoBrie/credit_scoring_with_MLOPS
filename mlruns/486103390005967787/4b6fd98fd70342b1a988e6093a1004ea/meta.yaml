@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/markobriesemann/Desktop/Openclassroom/Project_7/credit_scoring_withMLOPS/mlruns/486103390005967787/4b6fd98fd70342b1a988e6093a1004ea/artifacts
+end_time: 1709032578081
+entry_point_name: ''
+experiment_id: '486103390005967787'
+lifecycle_stage: active
+run_id: 4b6fd98fd70342b1a988e6093a1004ea
+run_name: XGB
+run_uuid: 4b6fd98fd70342b1a988e6093a1004ea
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1709032578060
+status: 4
+tags: []
+user_id: markobriesemann

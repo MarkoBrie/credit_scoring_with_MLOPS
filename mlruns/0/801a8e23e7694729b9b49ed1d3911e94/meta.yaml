@@ -1,0 +1,15 @@
+artifact_uri: mlflow-artifacts:/0/801a8e23e7694729b9b49ed1d3911e94/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 801a8e23e7694729b9b49ed1d3911e94
+run_name: XGB
+run_uuid: 801a8e23e7694729b9b49ed1d3911e94
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1708941481281
+status: 1
+tags: []
+user_id: markobriesemann

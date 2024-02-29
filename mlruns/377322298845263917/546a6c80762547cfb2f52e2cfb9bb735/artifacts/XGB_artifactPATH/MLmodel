@@ -1,0 +1,125 @@
+artifact_path: XGB_artifactPATH
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.8.8
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.3.1
+mlflow_version: 2.9.2
+model_size_bytes: 465095
+model_uuid: 2e6f5ea6a98342998a3d7dfc2f62ba46
+run_id: 546a6c80762547cfb2f52e2cfb9bb735
+signature:
+  inputs: '[{"type": "long", "name": "0"}, {"type": "long", "name": "1"}, {"type":
+    "long", "name": "2"}, {"type": "long", "name": "3"}, {"type": "double", "name":
+    "4"}, {"type": "double", "name": "5"}, {"type": "double", "name": "6"}, {"type":
+    "double", "name": "7"}, {"type": "double", "name": "8"}, {"type": "long", "name":
+    "9"}, {"type": "double", "name": "10"}, {"type": "double", "name": "11"}, {"type":
+    "long", "name": "12"}, {"type": "double", "name": "13"}, {"type": "long", "name":
+    "14"}, {"type": "long", "name": "15"}, {"type": "long", "name": "16"}, {"type":
+    "long", "name": "17"}, {"type": "long", "name": "18"}, {"type": "long", "name":
+    "19"}, {"type": "double", "name": "20"}, {"type": "long", "name": "21"}, {"type":
+    "long", "name": "22"}, {"type": "long", "name": "23"}, {"type": "long", "name":
+    "24"}, {"type": "long", "name": "25"}, {"type": "long", "name": "26"}, {"type":
+    "long", "name": "27"}, {"type": "long", "name": "28"}, {"type": "long", "name":
+    "29"}, {"type": "double", "name": "30"}, {"type": "double", "name": "31"}, {"type":
+    "double", "name": "32"}, {"type": "double", "name": "33"}, {"type": "double",
+    "name": "34"}, {"type": "double", "name": "35"}, {"type": "double", "name": "36"},
+    {"type": "double", "name": "37"}, {"type": "double", "name": "38"}, {"type": "double",
+    "name": "39"}, {"type": "double", "name": "40"}, {"type": "double", "name": "41"},
+    {"type": "double", "name": "42"}, {"type": "double", "name": "43"}, {"type": "double",
+    "name": "44"}, {"type": "double", "name": "45"}, {"type": "double", "name": "46"},
+    {"type": "double", "name": "47"}, {"type": "double", "name": "48"}, {"type": "double",
+    "name": "49"}, {"type": "double", "name": "50"}, {"type": "double", "name": "51"},
+    {"type": "double", "name": "52"}, {"type": "double", "name": "53"}, {"type": "double",
+    "name": "54"}, {"type": "double", "name": "55"}, {"type": "double", "name": "56"},
+    {"type": "double", "name": "57"}, {"type": "double", "name": "58"}, {"type": "double",
+    "name": "59"}, {"type": "double", "name": "60"}, {"type": "double", "name": "61"},
+    {"type": "double", "name": "62"}, {"type": "double", "name": "63"}, {"type": "double",
+    "name": "64"}, {"type": "double", "name": "65"}, {"type": "double", "name": "66"},
+    {"type": "double", "name": "67"}, {"type": "double", "name": "68"}, {"type": "double",
+    "name": "69"}, {"type": "double", "name": "70"}, {"type": "double", "name": "71"},
+    {"type": "double", "name": "72"}, {"type": "double", "name": "73"}, {"type": "double",
+    "name": "74"}, {"type": "double", "name": "75"}, {"type": "double", "name": "76"},
+    {"type": "double", "name": "77"}, {"type": "double", "name": "78"}, {"type": "double",
+    "name": "79"}, {"type": "double", "name": "80"}, {"type": "long", "name": "81"},
+    {"type": "long", "name": "82"}, {"type": "long", "name": "83"}, {"type": "long",
+    "name": "84"}, {"type": "long", "name": "85"}, {"type": "long", "name": "86"},
+    {"type": "long", "name": "87"}, {"type": "long", "name": "88"}, {"type": "long",
+    "name": "89"}, {"type": "long", "name": "90"}, {"type": "long", "name": "91"},
+    {"type": "long", "name": "92"}, {"type": "long", "name": "93"}, {"type": "long",
+    "name": "94"}, {"type": "long", "name": "95"}, {"type": "long", "name": "96"},
+    {"type": "long", "name": "97"}, {"type": "long", "name": "98"}, {"type": "long",
+    "name": "99"}, {"type": "long", "name": "100"}, {"type": "double", "name": "101"},
+    {"type": "double", "name": "102"}, {"type": "double", "name": "103"}, {"type":
+    "double", "name": "104"}, {"type": "double", "name": "105"}, {"type": "double",
+    "name": "106"}, {"type": "boolean", "name": "107"}, {"type": "boolean", "name":
+    "108"}, {"type": "boolean", "name": "109"}, {"type": "boolean", "name": "110"},
+    {"type": "boolean", "name": "111"}, {"type": "boolean", "name": "112"}, {"type":
+    "boolean", "name": "113"}, {"type": "boolean", "name": "114"}, {"type": "boolean",
+    "name": "115"}, {"type": "boolean", "name": "116"}, {"type": "boolean", "name":
+    "117"}, {"type": "boolean", "name": "118"}, {"type": "boolean", "name": "119"},
+    {"type": "boolean", "name": "120"}, {"type": "boolean", "name": "121"}, {"type":
+    "boolean", "name": "122"}, {"type": "boolean", "name": "123"}, {"type": "boolean",
+    "name": "124"}, {"type": "boolean", "name": "125"}, {"type": "boolean", "name":
+    "126"}, {"type": "boolean", "name": "127"}, {"type": "boolean", "name": "128"},
+    {"type": "boolean", "name": "129"}, {"type": "boolean", "name": "130"}, {"type":
+    "boolean", "name": "131"}, {"type": "boolean", "name": "132"}, {"type": "boolean",
+    "name": "133"}, {"type": "boolean", "name": "134"}, {"type": "boolean", "name":
+    "135"}, {"type": "boolean", "name": "136"}, {"type": "boolean", "name": "137"},
+    {"type": "boolean", "name": "138"}, {"type": "boolean", "name": "139"}, {"type":
+    "boolean", "name": "140"}, {"type": "boolean", "name": "141"}, {"type": "boolean",
+    "name": "142"}, {"type": "boolean", "name": "143"}, {"type": "boolean", "name":
+    "144"}, {"type": "boolean", "name": "145"}, {"type": "boolean", "name": "146"},
+    {"type": "boolean", "name": "147"}, {"type": "boolean", "name": "148"}, {"type":
+    "boolean", "name": "149"}, {"type": "boolean", "name": "150"}, {"type": "boolean",
+    "name": "151"}, {"type": "boolean", "name": "152"}, {"type": "boolean", "name":
+    "153"}, {"type": "boolean", "name": "154"}, {"type": "boolean", "name": "155"},
+    {"type": "boolean", "name": "156"}, {"type": "boolean", "name": "157"}, {"type":
+    "boolean", "name": "158"}, {"type": "boolean", "name": "159"}, {"type": "boolean",
+    "name": "160"}, {"type": "boolean", "name": "161"}, {"type": "boolean", "name":
+    "162"}, {"type": "boolean", "name": "163"}, {"type": "boolean", "name": "164"},
+    {"type": "boolean", "name": "165"}, {"type": "boolean", "name": "166"}, {"type":
+    "boolean", "name": "167"}, {"type": "boolean", "name": "168"}, {"type": "boolean",
+    "name": "169"}, {"type": "boolean", "name": "170"}, {"type": "boolean", "name":
+    "171"}, {"type": "boolean", "name": "172"}, {"type": "boolean", "name": "173"},
+    {"type": "boolean", "name": "174"}, {"type": "boolean", "name": "175"}, {"type":
+    "boolean", "name": "176"}, {"type": "boolean", "name": "177"}, {"type": "boolean",
+    "name": "178"}, {"type": "boolean", "name": "179"}, {"type": "boolean", "name":
+    "180"}, {"type": "boolean", "name": "181"}, {"type": "boolean", "name": "182"},
+    {"type": "boolean", "name": "183"}, {"type": "boolean", "name": "184"}, {"type":
+    "boolean", "name": "185"}, {"type": "boolean", "name": "186"}, {"type": "boolean",
+    "name": "187"}, {"type": "boolean", "name": "188"}, {"type": "boolean", "name":
+    "189"}, {"type": "boolean", "name": "190"}, {"type": "boolean", "name": "191"},
+    {"type": "boolean", "name": "192"}, {"type": "boolean", "name": "193"}, {"type":
+    "boolean", "name": "194"}, {"type": "boolean", "name": "195"}, {"type": "boolean",
+    "name": "196"}, {"type": "boolean", "name": "197"}, {"type": "boolean", "name":
+    "198"}, {"type": "boolean", "name": "199"}, {"type": "boolean", "name": "200"},
+    {"type": "boolean", "name": "201"}, {"type": "boolean", "name": "202"}, {"type":
+    "boolean", "name": "203"}, {"type": "boolean", "name": "204"}, {"type": "boolean",
+    "name": "205"}, {"type": "boolean", "name": "206"}, {"type": "boolean", "name":
+    "207"}, {"type": "boolean", "name": "208"}, {"type": "boolean", "name": "209"},
+    {"type": "boolean", "name": "210"}, {"type": "boolean", "name": "211"}, {"type":
+    "boolean", "name": "212"}, {"type": "boolean", "name": "213"}, {"type": "boolean",
+    "name": "214"}, {"type": "boolean", "name": "215"}, {"type": "boolean", "name":
+    "216"}, {"type": "boolean", "name": "217"}, {"type": "boolean", "name": "218"},
+    {"type": "boolean", "name": "219"}, {"type": "boolean", "name": "220"}, {"type":
+    "boolean", "name": "221"}, {"type": "boolean", "name": "222"}, {"type": "boolean",
+    "name": "223"}, {"type": "boolean", "name": "224"}, {"type": "boolean", "name":
+    "225"}, {"type": "boolean", "name": "226"}, {"type": "boolean", "name": "227"},
+    {"type": "boolean", "name": "228"}, {"type": "boolean", "name": "229"}, {"type":
+    "boolean", "name": "230"}, {"type": "boolean", "name": "231"}, {"type": "boolean",
+    "name": "232"}, {"type": "boolean", "name": "233"}, {"type": "boolean", "name":
+    "234"}, {"type": "boolean", "name": "235"}, {"type": "boolean", "name": "236"},
+    {"type": "boolean", "name": "237"}, {"type": "boolean", "name": "238"}]'
+  outputs: '[{"type": "tensor", "tensor-spec": {"dtype": "int64", "shape": [-1]}}]'
+  params: null
+utc_time_created: '2024-02-27 10:55:30.616378'
