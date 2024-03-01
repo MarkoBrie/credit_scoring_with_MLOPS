@@ -35,17 +35,17 @@ The data is provided by [Home Credit](http://www.homecredit.net/about-us.aspx).
 
 ### Create project folder and start Visual Studio Code
 Open a terminal 
-'''
+```
 mkdir project_name
 cd project_name
 code .
-'''
+```
 ### Pipenv environment
 Install pipenv
-'''
+```
 sudo -H pip install -U pipenv
 pipenv install fastapi uvicorn
-'''
+```
 
 ## Hosting with Microsoft AZURE
 
