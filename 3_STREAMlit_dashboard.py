@@ -31,11 +31,27 @@ def main():
     st.title('Prédiction du Credit Score avec ID')
 
     # load file into pandas
-    ids_test = pd.read_csv('../2_INPUT_DATA/3_SPLIT/ids_test.csv')
-    X_train = pd.read_csv('../2_INPUT_DATA/3_SPLIT/X_train.csv')
+   # ids_test = pd.read_csv('../2_INPUT_DATA/3_SPLIT/ids_test.csv')
+    #X_train = pd.read_csv('../2_INPUT_DATA/3_SPLIT/X_test.csv')
+    #feature_name = pd.read_csv('../2_INPUT_DATA/2_FEATURE_PROCESSED/feature_names.csv')
+    
+    ids_test = pd.read_csv('data/test_ids.csv')
+    X_train = pd.read_csv('data/X_test.csv')
+    feature_name = pd.read_csv('data/feature_names.csv')
+
+    st.write('data size ', X_train.shape )
+    # Set feature names as column names for X_train
+    X_train.columns = feature_name['0'].tolist()
+    selected_columns = ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT']
+
     X_train["ID"] = ids_test
     X_train.set_index("ID", inplace=True)
     st.write(X_train.shape)
+
+    # Select the desired columns from X_train
+    selected_features = X_train[selected_columns]
+    # Print the selected features
+    st.write('selected features', selected_features)
     
     # Select columns with data type 'int64'
     int_columns = X_train.select_dtypes(include=['int64']).columns
@@ -61,6 +77,10 @@ def main():
     st.write(X_train.info())
     data =  { "data_point":X_train.loc[selected_id].values.tolist()}
     #st.write(data)
+  
+    selected_data = X_train.loc[selected_id, selected_columns]
+    st.write('for client', selected_id)
+    st.write(selected_data)
 
     predict_btn = st.button('Prédire')
     if predict_btn:
