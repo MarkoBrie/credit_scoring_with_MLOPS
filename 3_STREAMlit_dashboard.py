@@ -27,6 +27,60 @@ def request_prediction(model_uri: str, data: dict) -> dict:
 
     return response.json()
 
+def hight_of_selected_point(hist, data, highlighted_index):
+    bin_counts = [rect.get_height() for rect in hist.patches]
+    print(len(bin_counts))
+    print(len(bin_counts)/2)
+    print(min(data['DAYS_BIRTH']), " ", max(data['DAYS_BIRTH']))
+    print("selected point: ", data.loc[highlighted_index, 'DAYS_BIRTH'])
+    scaled_point = int(round(data.loc[highlighted_index, 'DAYS_BIRTH']-min(data['DAYS_BIRTH'])))
+    print("scaled point: ", scaled_point)
+
+    steps = (max(data['DAYS_BIRTH'])-min(data['DAYS_BIRTH']))/(len(bin_counts)/2)
+    print("steps :", steps )
+    
+    if data.loc[highlighted_index, 'TARGET'] == 0:
+        bucket = int(round(scaled_point / steps,0))
+ 
+    elif data.loc[highlighted_index, 'TARGET'] == 1:
+        bucket = int(round(scaled_point / steps,0)+(len(bin_counts)/2))
+        
+    print("bucket :", bucket)
+    hight = bin_counts[bucket]/2
+    print("hight :", hight)
+    
+    return hight
+
+def plot_histogram(data):
+
+    # Highlighted data point
+    highlighted_index = 0  # Index of the data point to highlight
+    highlighted_value = data.loc[highlighted_index, 'DAYS_BIRTH']
+
+    # Plotting
+    fig, ax = plt.subplots()
+    hist = sns.histplot(data=data, x='DAYS_BIRTH', hue='TARGET', kde=True,  multiple='stack', ax=ax) #stat='density',
+    # Get the counts for each bin
+    hight_P = hight_of_selected_point(hist, data, highlighted_index)
+
+    # Highlight one specific data point
+    if Y_train.loc[highlighted_index, 'TARGET'] == 1:
+        ax.scatter(highlighted_value, hight_P, color='red', label='Highlighted Point', zorder=5)
+    elif Y_train.loc[highlighted_index, 'TARGET'] == 0:
+        ax.scatter(highlighted_value, hight_P, color='blue', label='Highlighted Point', zorder=5)
+
+    # Customize plot
+    ax.set_xlabel('Customer Age')
+    ax.set_ylabel('Number of Customers')
+    ax.set_title('Stacked Distribution of Customer Age with Highlighted Point')
+    legend = ax.get_legend()
+    handles = legend.legend_handles
+    legend.remove()
+    ax.legend(handles, ['0 pays', '1 will have difficulty'], title='Client group')
+
+    st.show(fig)
+    
+
 
 def main():
     MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
@@ -39,6 +93,8 @@ def main():
     st.title('Prédiction du Credit Score avec ID')
 
     data_slice = pd.read_csv('data/X_train_slice.csv')
+
+    plot_histogram(data_slice)
 
     ids_test = pd.read_csv('data/test_ids.csv')
     X_train = pd.read_csv('data/X_test.csv')

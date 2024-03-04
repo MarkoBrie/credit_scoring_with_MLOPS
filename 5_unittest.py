@@ -43,7 +43,7 @@ def test_client_emptyData():
 def test_read_main():
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"data": "Application ran successfully - FastAPI release v4.2 with Github Actions no staging: cloudpickle try environment pipenv"}
+    assert response.json() == {"data": "Application ran successfully - FastAPI ML endpoint deployed with Github Actions on Microsoft AZURE"}
 
 if __name__ == '__main__':
     unittest.main()
