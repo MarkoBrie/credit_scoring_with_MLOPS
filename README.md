@@ -134,8 +134,19 @@ pipenv run python main.py
 You can find more details on creating and deploying a FastAPI in this [blog](https://towardsdatascience.com/how-to-build-and-deploy-a-machine-learning-model-with-fastapi-64c505213857)
 
 ## Docker
+
+
 ## Hosting with Microsoft AZURE
 
+
+## Github Actions
+Using Github Actions we can automatize the Docker build process and the push to our hosting platform. We have created a yml file in the 
+`.github/workflows` folder.
+```
+docker build . -t fastapicd2024.azurecr.io/fastapi-cd:${{ github.sha }}
+docker push fastapicd2024.azurecr.io/fastapi-cd:${{ github.sha }}
+```
+Details on how to setup your Github Actions with Azure you can find in this [blog](https://towardsdatascience.com/deploy-fastapi-on-azure-with-github-actions-32c5ab248ce3)
 
 ## The frontend with FastAPI
 

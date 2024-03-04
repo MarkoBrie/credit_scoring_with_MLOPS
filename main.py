@@ -64,9 +64,9 @@ def predict_credit_score(data: DataPoint):
 
 @app.get("/")
 def index():
-    return {"data": "Application ran successfully - FastAPI release v4.2 with Github Actions no staging: cloudpickle try environment pipenv"     
+    return {"data": "Application ran successfully - FastAPI ML endpoint deployed with Github Actions on Microsoft AZURE"     
     }
-    #return {st.title("Hello World")}
+    
 
 if __name__ == "__main__":
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=False)

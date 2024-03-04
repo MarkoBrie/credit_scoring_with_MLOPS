@@ -2,23 +2,31 @@ import pandas as pd
 import streamlit as st
 import requests
 
-def request_prediction(model_uri, data):
+def request_prediction(model_uri: str, data: dict) -> dict:
+    """
+    Function to request a prediction from a deployed model.
+
+    Args:
+        model_uri (str): The URI of the deployed model.
+        data (dict): The input data for which prediction is requested.
+
+    Returns:
+        dict: The prediction result in JSON format.
+        
+    Raises:
+        Exception: If the request to the model fails.
+    """
     headers = {"Content-Type": "application/json"}
 
-    data_json = data
-
-    #st.write(data_json)
-    
     response = requests.request(
-        method='POST', headers=headers, url=model_uri, json=data_json)
+        method='POST', headers=headers, url=model_uri, json=data)
 
     if response.status_code != 200:
         raise Exception(
             "Request failed with status {}, {}".format(response.status_code, response.text))
 
     return response.json()
-#load id_test file
-#
+
 
 def main():
     MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
@@ -30,11 +38,8 @@ def main():
 
     st.title('Prédiction du Credit Score avec ID')
 
-    # load file into pandas
-   # ids_test = pd.read_csv('../2_INPUT_DATA/3_SPLIT/ids_test.csv')
-    #X_train = pd.read_csv('../2_INPUT_DATA/3_SPLIT/X_test.csv')
-    #feature_name = pd.read_csv('../2_INPUT_DATA/2_FEATURE_PROCESSED/feature_names.csv')
-    
+    data_slice = pd.read_csv('data/X_train_slice.csv')
+
     ids_test = pd.read_csv('data/test_ids.csv')
     X_train = pd.read_csv('data/X_test.csv')
     feature_name = pd.read_csv('data/feature_names.csv')
