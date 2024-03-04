@@ -52,7 +52,6 @@ def predict_credit_score(data: DataPoint):
             
         sklearn_pyfunc = mlflow.lightgbm.load_model(model_uri="LightGBM")
         
-
         prediction = sklearn_pyfunc.predict_proba([data.data_point]).max()
 
         return {
