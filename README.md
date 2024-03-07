@@ -134,6 +134,19 @@ pipenv run python main.py
 You can find more details on creating and deploying a FastAPI in this [blog](https://towardsdatascience.com/how-to-build-and-deploy-a-machine-learning-model-with-fastapi-64c505213857)
 
 ## Docker
+Please install (Docker Desktop)[https://www.docker.com/products/docker-desktop].
+
+CREATE the ```Dockerfile``` and add the libraries that need to be installed for your APP to run.
+For example ```RUN pip install uvicorn```.
+For our FASTAPI API we use ```Python 3.8-bookworm```.
+
+Here are some useful commands:
+````
+RUN docker build . -t fastapi-cd:1.0
+RUN docker run -p 8000:8000 -t fastapi-cd:1.0
+```
+
+
 
 
 ## Hosting with Microsoft AZURE
