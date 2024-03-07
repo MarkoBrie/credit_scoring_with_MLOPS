@@ -134,24 +134,28 @@ pipenv run python main.py
 You can find more details on creating and deploying a FastAPI in this [blog](https://towardsdatascience.com/how-to-build-and-deploy-a-machine-learning-model-with-fastapi-64c505213857)
 
 ## Docker
-Please install (Docker Desktop)[https://www.docker.com/products/docker-desktop].
+In order to deploy our API endpoint to Azure we need to install (Docker Desktop)[https://www.docker.com/products/docker-desktop].
 
-CREATE the ```Dockerfile``` and add the libraries that need to be installed for your APP to run.
+In the ```Dockerfile``` you need to add the libraries that your APP needs to run.
 For example ```RUN pip install uvicorn```.
 For our FASTAPI API we use ```Python 3.8-bookworm```.
 
-Here are some useful commands:
-````
-RUN docker build . -t fastapi-cd:1.0
-RUN docker run -p 8000:8000 -t fastapi-cd:1.0
+Here are some useful commands to create a docker image:
 ```
-
+docker build . -t fastapi-cd:1.0
+````
+or to run the API from the docker image
+```
+docker run -p 8000:8000 -t fastapi-cd:1.0
+```
+You can check the API at ```http://localhost:8000/docs```.
 
 
 
 ## Hosting with Microsoft AZURE
 
-
+You find a great tutorial on how to setup your infrastructure [here](https://towardsdatascience.com/deploy-fastapi-on-azure-with-github-actions-32c5ab248ce3)
+ 
 ## Github Actions
 Using Github Actions we can automatize the Docker build process and the push to our hosting platform. We have created a yml file in the 
 `.github/workflows` folder.
