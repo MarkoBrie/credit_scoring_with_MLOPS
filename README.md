@@ -26,15 +26,15 @@ We use a pretrained model to predict credit scores and deploy that model as an A
 **PyTest** - Testing of Web APP functionality through
 **EvidentlyAI** - Data Drift detection
 
-# Outline of Readme
+## Scope of Readme
 
 We will cover in the readme the below concepts:
 
 
-1) How to create dockerfile for ML API deployment using FastAPI?
+1) How to create dockerfile for ML API deployment using FastAPI
 2) How to run different docker commands to build, run and debug and 
 3) How to push docker image to Github using Github Actions
-4) How to test ML API endpoint which is exposed by the running ML API docker container?
+4) How to test ML API endpoint which is exposed by the running ML API docker container
 
 ## The data
 The data is provided by [Home Credit](http://www.homecredit.net/about-us.aspx).
