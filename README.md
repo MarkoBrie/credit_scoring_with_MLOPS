@@ -9,7 +9,7 @@ We use a pretrained model to predict credit scores and deploy that model as an A
 | [**The data**](#the-data)
 | [**The backend with FastAPI**](#the-backedn-with-fastapi)
 | [**Docker**](#docker)
-| [**Hosting with Microsoft AZURE**](#Hosting with Microsoft AZURE)
+| [**Hosting with Microsoft AZURE**](#hosting-with-microsoft-azure)
 | [**Github Actions**](#github-actions)
 
 ## Tech Stack:  
