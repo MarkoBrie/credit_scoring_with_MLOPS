@@ -2,7 +2,11 @@
 
 The **Objective** of the ML model is to predict a credit score for historical loan application data to predict whether or not an applicant will be able to repay a loan.
 
-We will create a model to predict credit scores and deploy that model as an API using FastAPI and use Streamlit to create a WebAPP. We use Github Actions to facilitate and automatize DevOps and MLOps (CI/CD).
+We use a pretrained model to predict credit scores and deploy that model as an API using FastAPI and use Streamlit to create a WebAPP. We use Github Actions to facilitate and automatize DevOps and MLOps (CI/CD).
+
+[**Overview**](#overview)
+| [**Tech Stack**](#tech-stack)
+| [**The data**](#the-data)
 
 ## Tech Stack:  
 **VS Code** — as the IDE of choice.  
@@ -50,7 +54,7 @@ pipenv install fastapi uvicorn
 use `pipenv shell` to activate the virtual environment.
 
 
-## The backend with Streamlit
+## The backend with FastAPI
 You find the FastAPI in the file main.py
 ```
 import uvicorn
@@ -165,5 +169,15 @@ docker push fastapicd2024.azurecr.io/fastapi-cd:${{ github.sha }}
 ```
 Details on how to setup your Github Actions with Azure you can find in this [blog](https://towardsdatascience.com/deploy-fastapi-on-azure-with-github-actions-32c5ab248ce3)
 
-## The frontend with FastAPI
+## The frontend Dashboard with Streamlit
+
+You can run the dashboard locally anytime with this command but be aware that you will not get any prediction as long as the backend is not running. So make sure to start the back end first if you wish to test the dashboard together with the ML endpoint.
+
+```
+streamlit run 3_STREAMlit_dashboard.py
+`````
+
+## Python code test with Pytest
+
+You find the python code test in the file ```5_unittest.py````
 
