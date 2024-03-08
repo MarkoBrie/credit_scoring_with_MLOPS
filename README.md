@@ -7,6 +7,10 @@ We use a pretrained model to predict credit scores and deploy that model as an A
 [**Overview**](#overview)
 | [**Tech Stack**](#tech-stack)
 | [**The data**](#the-data)
+| [**The backend with FastAPI**](#the-backedn-with-fastapi)
+| [**Docker**](#docker)
+| [**Hosting with Microsoft AZURE**](#Hosting with Microsoft AZURE)
+| [**Github Actions**](#github-actions)
 
 ## Tech Stack:  
 **VS Code** — as the IDE of choice.  
