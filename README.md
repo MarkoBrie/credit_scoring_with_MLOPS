@@ -181,6 +181,56 @@ You can run the dashboard locally anytime with this command but be aware that yo
 streamlit run 3_STREAMlit_dashboard.py
 `````
 
+The Streamlit APP will be visible in your browser at: http://localhost:8501
+
+### Streamlit and Docker
+
+Make sure ```Docker Desktop``` is running. Go to the streamlit dashboard folder ```3_STREAMlit_dashboard```. Then run the following command in the terminal to build the container image:
+
+```
+docker build . -t dashboard-cd:1.0
+```
+and the next command to test the container image:
+```
+docker run -p 8501:8501 -t dashboard-cd:1.0
+```
+
+In Microsoft AZURE open ```AZURE Container Registry````
+Create a new one with the following parameters:
+
+```
+Resource group: fastapi-cd
+Container group: fastapicd2024
+Registry name: fastapi-cd
+Login server: fastapicd2024.azurecr.io
+```
+
+Open Terminal and run:
+```
+az login
+az acr login --name fastapicd2024
+```
+then try to build the container that are pushed to AZURE:
+```
+docker build . -t fastapicd2024.azurecr.io/dashboard-cd:1.1
+docker images
+docker push fastapicd2024.azurecr.io/dashboard-cd:1.1
+```
+
+Now you just need to create a Web APP service instance and connect to your container:
+Go to ```AZURE APP Service``` and create a new instance:
+
+In Basics tab  
+Resource group: fastapi-cd
+Name: credit-score-dashboard
+Publier: Container Docker  
+
+In the Docker tab
+Image source: Azure Container Registry
+Registry: fastapicd2024
+Image: dashboard-cd
+Startup command: streamlit run 3_STREAMlit_dashboard.py
+
 ## Python code test with Pytest
 
 You find the python code test in the file ```5_unittest.py````

@@ -16,6 +16,7 @@ httpx = "*"
 pytest = "*"
 seaborn = "*"
 streamlit-option-menu = "*"
+requests = "*"
 
 [dev-packages]
 

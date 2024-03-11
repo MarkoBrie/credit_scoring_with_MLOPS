@@ -1,19 +1,10 @@
 import pandas as pd
 import streamlit as st
-import streamlit_option_menu
-from streamlit_option_menu import option_menu
-
 import requests
 
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-st.set_page_config(layout="wide")
-
-with st.sidebar:
-    selected = option_menu("Main Menu", ["Home", 'Customer View', 'Settings'], 
-        icons=['house', "activity",'gear'], menu_icon="cast", default_index=0)
-    selected
 
 def request_prediction(model_uri: str, data: dict) -> dict:
     """
@@ -99,7 +90,7 @@ def plot_histogram(data, id, age, category):
 def main():
     MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
     #MLFLOW_URI = 'http://0.0.0.0:8000/predict'
-    
+
     api_choice = st.sidebar.selectbox(
         'Quelle API souhaitez vous utiliser',
         ['MLflow', 'Option 2', 'Option 3'])
@@ -108,18 +99,17 @@ def main():
         'Quelle donnée souhaitez vous étudier',
         ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT'])
 
-    st.title('Prédiction du Credit Score avec ID now')
+    st.title('Prédiction du Credit Score avec ID')
 
-    data_slice = pd.read_csv('data/X_train_slice.csv')
+    data_slice = pd.read_csv('../data/X_train_slice.csv')
     data_slice['DAYS_BIRTH'] = abs(data_slice['DAYS_BIRTH'])/365
 
-    # 1 customer age
-    age = pd.read_csv('data/1_age.csv')
 
-    ids_test = pd.read_csv('data/test_ids.csv')
-    X_train = pd.read_csv('data/X_test.csv')
-    feature_name = pd.read_csv('data/feature_names.csv')
+    ids_test = pd.read_csv('../data/test_ids.csv')
+    X_train = pd.read_csv('../data/X_test.csv')
+    feature_name = pd.read_csv('../data/feature_names.csv')
  
+    st.write('data size ', X_train.shape )
     # Set feature names as column names for X_train
     X_train.columns = feature_name['0'].tolist()
     selected_columns = ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT']
@@ -127,7 +117,13 @@ def main():
 
     X_train["ID"] = ids_test
     X_train.set_index("ID", inplace=True)
+    st.write(X_train.shape)
 
+    # Select the desired columns from X_train
+    selected_features = X_train[selected_columns]
+    # Print the selected features
+    st.write('selected features', selected_features)
+    
     # Select columns with data type 'int64'
     int_columns = X_train.select_dtypes(include=['int64']).columns
     # Convert selected columns to int
@@ -139,10 +135,17 @@ def main():
     # Convert selected columns to int
     X_train[int_columns] = X_train[int_columns].astype('float')
 
+    st.write(X_train.info())
+
     id_list = ids_test.iloc[:,0].values.tolist()
 
     selected_id = st.selectbox('Search and select an ID', options=id_list, index=0, format_func=lambda x: x if x else 'Search...')
 
+    #get selected_id index in ids_test and use the index to get the data
+    st.write(selected_id)
+    st.write(X_train.loc[selected_id].shape)
+    st.write(X_train.loc[selected_id].values.tolist())
+    st.write(X_train.info())
     data =  { "data_point":X_train.loc[selected_id].values.tolist()}
     #st.write(data)
   
@@ -151,33 +154,7 @@ def main():
     st.write(selected_data)
 
     selected_client_DP = X_train.loc[selected_id, data_category]
-
-    if selected == "Customer View":
-        st.header('Snowflake Healthcare App')
-        # Create a row layout
-        c1, c2= st.columns(2)
-
-        with st.container():
-            c1.write("c1")
-            c2.write("c2")
-
-        with c1:
-            chart_data = age
-            st.bar_chart(data=chart_data, x='Age',y=('TARGET0', 'TARGET1'))
-
-        with c1:
-            chart_data = age
-            st.bar_chart(data=chart_data, x='Age',y=('AGE1ratio'))
-
-        plot_histogram(data_slice, selected_id, selected_client_DP, data_category)
-
-    elif selected == "Settings":
-        # Select the desired columns from X_train
-        selected_features = X_train[selected_columns]
-        # Print the selected features
-        st.write('selected features', selected_features)
-
-
+    plot_histogram(data_slice, selected_id, selected_client_DP, data_category)
 
     predict_btn = st.button('Prédire')
     if predict_btn:
@@ -196,8 +173,6 @@ def main():
 
         st.write(MLFLOW_URI)
         #st.write(data)
-        threshold = 0.2
-
         pred = request_prediction(MLFLOW_URI, data)#[0] * 100000
         score = 0 if pred["prediction"] < 0.2 else 1
         #st.write(pred)
@@ -205,11 +180,7 @@ def main():
 
         st.write(
             'Le score crédit est de {:.2f}'.format(score))
-        
-        col1, col2, col3 = st.columns(3)
-        col1.metric(label= "Score", value= score, delta=(str((score-threshold)/threshold)+" %"), delta_color="normal", help=None, label_visibility="visible")
-        col2.metric("age", "9 mph", "-8%")
-        col3.metric("Income", "86%", "4%")
+            
 
 if __name__ == '__main__':
     main()
