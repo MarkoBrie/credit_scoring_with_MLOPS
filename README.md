@@ -195,7 +195,7 @@ and the next command to test the container image:
 docker run -p 8501:8501 -t dashboard-cd:1.0
 ```
 
-In Microsoft AZURE open ```AZURE Container Registry````
+In Microsoft AZURE open ```AZURE Container Registry```
 Create a new one with the following parameters:
 
 ```
@@ -210,7 +210,7 @@ Open Terminal and run:
 az login
 az acr login --name fastapicd2024
 ```
-then try to build the container that are pushed to AZURE:
+then try to build the container that is pushed to AZURE:
 ```
 docker build . -t fastapicd2024.azurecr.io/dashboard-cd:1.1
 docker images
@@ -220,16 +220,23 @@ docker push fastapicd2024.azurecr.io/dashboard-cd:1.1
 Now you just need to create a Web APP service instance and connect to your container:
 Go to ```AZURE APP Service``` and create a new instance:
 
-In Basics tab  
+In Basics tab 
+``` 
 Resource group: fastapi-cd
 Name: credit-score-dashboard
 Publier: Container Docker  
+```
 
-In the Docker tab
+And in the Docker tab  
+```
 Image source: Azure Container Registry
 Registry: fastapicd2024
 Image: dashboard-cd
 Startup command: streamlit run 3_STREAMlit_dashboard.py
+```
+
+Now got to to your WEB APP at: 
+https://credit-score-dashboard.azurewebsites.net/
 
 ## Python code test with Pytest
 

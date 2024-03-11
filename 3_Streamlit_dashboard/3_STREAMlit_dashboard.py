@@ -108,7 +108,7 @@ def main():
         'Quelle donnée souhaitez vous étudier',
         ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT'])
 
-    st.title('Prédiction du Credit Score avec ID now')
+    st.title('Prédiction du Credit Score avec ID now et maintenant')
 
     data_slice = pd.read_csv('data/X_train_slice.csv')
     data_slice['DAYS_BIRTH'] = abs(data_slice['DAYS_BIRTH'])/365
