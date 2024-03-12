@@ -7,6 +7,7 @@ import requests
 
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.graph_objects as go
 
 st.set_page_config(layout="wide")
 
@@ -165,7 +166,7 @@ def main():
             chart_data = age
             st.bar_chart(data=chart_data, x='Age',y=('TARGET0', 'TARGET1'))
 
-        with c1:
+        with c2:
             chart_data = age
             st.bar_chart(data=chart_data, x='Age',y=('AGE1ratio'))
 
@@ -177,6 +178,46 @@ def main():
         # Print the selected features
         st.write('selected features', selected_features)
 
+    st.header('Gauge chart')
+    # Create a row layout
+    c1, c2= st.columns(2)
+
+    with st.container():
+        c1.write("c1")
+        c2.write("c2")
+
+    with c1:
+        fig = go.Figure(go.Indicator(
+            mode = "gauge+number",
+            value = 0.99,
+            domain = {'x': [0, 1], 'y': [0, 1]},
+            title = {'text': "Risk"}))
+        # Display the figure in Streamlit
+        st.plotly_chart(fig)
+
+    with c2:
+        fig = go.Figure(go.Indicator(
+            mode = "gauge+number+delta",
+            value = 0.9,
+            domain = {'x': [0, 1], 'y': [0, 1]},
+            title = {'text': "RISK", 'font': {'size': 24}},
+            delta = {'reference': 0.2, 'increasing': {'color': "RebeccaPurple"}},
+            gauge = {
+                'axis': {'range': [None, 1], 'tickwidth': 1, 'tickcolor': "gray"},
+                'bar': {'color': "gray"},
+                'bgcolor': "white",
+                'borderwidth': 2,
+                'bordercolor': "gray",
+                'steps': [
+                    {'range': [0, 0.2], 'color': 'yellowgreen'},
+                    {'range': [0.2, 1], 'color': 'lightcoral'}],
+                'threshold': {
+                    'line': {'color': "red", 'width': 4},
+                    'thickness': 0.75,
+                    'value': 0.2}}))
+
+        fig.update_layout(paper_bgcolor = "white", font = {'color': "dimgray", 'family': "Arial"})
+        st.plotly_chart(fig)
 
 
     predict_btn = st.button('Prédire')
@@ -209,7 +250,10 @@ def main():
         col1, col2, col3 = st.columns(3)
         col1.metric(label= "Score", value= score, delta=(str((score-threshold)/threshold)+" %"), delta_color="normal", help=None, label_visibility="visible")
         col2.metric("age", "9 mph", "-8%")
-        col3.metric("Income", "86%", "4%")
+        col3.metric("Threshold", "86%", "4%")
+
+
+        
 
 if __name__ == '__main__':
     main()

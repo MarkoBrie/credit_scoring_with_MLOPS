@@ -17,6 +17,7 @@ pytest = "*"
 seaborn = "*"
 streamlit-option-menu = "*"
 requests = "*"
+plotly = "*"
 
 [dev-packages]
 

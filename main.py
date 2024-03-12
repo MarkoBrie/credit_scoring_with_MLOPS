@@ -50,13 +50,15 @@ def predict_credit_score(data: DataPoint):
         #data = {"data_point": data_test}
         #prediction = sklearn_pyfunc.predict_proba(data_test).max()
             
-        sklearn_pyfunc = mlflow.lightgbm.load_model(model_uri="LightGBM")
+        model = mlflow.lightgbm.load_model(model_uri="LightGBM")
         
-        prediction = sklearn_pyfunc.predict_proba([data.data_point]).max()
+        prediction = model.predict_proba([data.data_point]).max()
+        # Get feature importances
+        importances = model.feature_importances_
 
         return {
             'prediction': prediction,
-            'probability': 0.8
+            'importances': importances
         }
     except Exception as e:
         error_msg = f"An error occurred during prediction: {str(e)}"
