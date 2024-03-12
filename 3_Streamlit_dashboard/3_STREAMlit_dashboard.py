@@ -241,7 +241,7 @@ def main():
 
         pred = request_prediction(MLFLOW_URI, data)#[0] * 100000
         score = 0 if pred["prediction"] < 0.2 else 1
-        #st.write(pred)
+        
         st.write(pred["prediction"], " -> score ", score)
 
         st.write(

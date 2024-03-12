@@ -58,7 +58,7 @@ def predict_credit_score(data: DataPoint):
 
         return {
             'prediction': prediction,
-            'importances': importances
+            'probability': 0.8
         }
     except Exception as e:
         error_msg = f"An error occurred during prediction: {str(e)}"
