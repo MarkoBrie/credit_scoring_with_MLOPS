@@ -18,6 +18,8 @@ RUN pip install streamlit_option_menu
 RUN pip install requests
 RUN pip install matplotlib
 RUN pip install seaborn 
+RUN pip install bokeh
+RUN pip install plotly
 
 # expose the port that uvicorn will run the app on
 ENV PORT=8501

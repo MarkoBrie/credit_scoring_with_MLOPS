@@ -9,11 +9,57 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import plotly.graph_objects as go
 
-st.set_page_config(layout="wide")
+from bokeh.plotting import figure, show
+from bokeh.models import ColumnDataSource, Slider
+from bokeh.transform import factor_cmap
+from bokeh.palettes import Set3
+import bokeh.plotting as bpl
+import bokeh.models as bmo
+from bokeh.layouts import column
+
+def bokeh_scatter(data_slice, data_category, data_category_y):
+    # Create a ColumnDataSource
+    # Color for no risk
+    data_slice['color'] = '#8dd3c7'
+
+    # condition for RISK
+    condition = data_slice['TARGET'] == 1
+
+    # Color for RISK
+    data_slice.loc[condition, 'color'] = '#fb8072'
+
+    df = pd.DataFrame(
+        {
+            "gender": data_slice['CODE_GENDER'],
+            "risk":  data_slice['TARGET'],
+            "kpi1": data_slice[data_category],
+            "kpi2": data_slice[data_category_y],
+            "color": data_slice['color']
+        }
+    )
+
+    source = bpl.ColumnDataSource.from_df(df)
+    hover = bmo.HoverTool(
+        tooltips=[
+            ('gender', '@gender'),
+            ("RISK", '@risk')
+        ]
+    )
+    p = bpl.figure(tools=[hover, "pan", "wheel_zoom"],title='Scatter plot',
+        x_axis_label=data_category,
+        y_axis_label=data_category_y )
+
+    p.scatter(
+        'kpi1', 
+        'kpi2', source=source, color='color')
+    
+    st.bokeh_chart(p, use_container_width=True)
+
+#st.set_page_config(layout="wide")
 
 with st.sidebar:
-    selected = option_menu("Main Menu", ["Home", 'Customer View', 'Settings'], 
-        icons=['house', "activity",'gear'], menu_icon="cast", default_index=0)
+    selected = option_menu("Main Menu", ["Home", 'Risk Prediction', 'Dashboard','Scatter Plot', 'Customer View'], 
+        icons=['house', "shield-check",'bar-chart', 'binoculars', 'gear'], menu_icon="cast", default_index=0)
     selected
 
 def request_prediction(model_uri: str, data: dict) -> dict:
@@ -31,7 +77,7 @@ def request_prediction(model_uri: str, data: dict) -> dict:
         Exception: If the request to the model fails.
     """
     headers = {"Content-Type": "application/json"}
-
+    print(data)
     response = requests.request(
         method='POST', headers=headers, url=model_uri, json=data)
 
@@ -101,28 +147,15 @@ def main():
     MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
     #MLFLOW_URI = 'http://0.0.0.0:8000/predict'
     
-    api_choice = st.sidebar.selectbox(
-        'Quelle API souhaitez vous utiliser',
-        ['MLflow', 'Option 2', 'Option 3'])
-    
-    data_category = st.sidebar.selectbox(
-        'Quelle donnée souhaitez vous étudier',
-        ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT'])
-
-    st.title('Prédiction du Credit Score avec ID now et maintenant')
-
-    data_slice = pd.read_csv('data/X_train_slice.csv')
-    data_slice['DAYS_BIRTH'] = abs(data_slice['DAYS_BIRTH'])/365
-
-    # 1 customer age
-    age = pd.read_csv('data/1_age.csv')
-
     ids_test = pd.read_csv('data/test_ids.csv')
+    id_list = ids_test.iloc[:,0].values.tolist()
+
     X_train = pd.read_csv('data/X_test.csv')
     feature_name = pd.read_csv('data/feature_names.csv')
  
     # Set feature names as column names for X_train
     X_train.columns = feature_name['0'].tolist()
+    
     selected_columns = ['DAYS_BIRTH', 'DAYS_EMPLOYED', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT']
     X_train['DAYS_BIRTH'] = abs(X_train['DAYS_BIRTH'])/365
 
@@ -140,21 +173,50 @@ def main():
     # Convert selected columns to int
     X_train[int_columns] = X_train[int_columns].astype('float')
 
-    id_list = ids_test.iloc[:,0].values.tolist()
 
-    selected_id = st.selectbox('Search and select an ID', options=id_list, index=0, format_func=lambda x: x if x else 'Search...')
+    api_choice = st.sidebar.selectbox(
+        'Choose a model',
+        ['LightGBM', 'XGB in progress', 'XGboost in progress'])
+    
+    data_category = st.sidebar.selectbox(
+        'Quelle donnée souhaitez vous étudier',
+        ['age', 'Work_in_years', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT'])
+
+    data_category_y = st.sidebar.selectbox(
+        'Add an Y-axis', 
+        ['age', 'Work_in_years', 'AMT_INCOME_TOTAL', 'OWN_CAR_AGE', 'AMT_CREDIT'],
+        index=2
+        )
+
+    selected_id = st.sidebar.selectbox('Search and select an ID', options=id_list, index=0, format_func=lambda x: x if x else 'Search...')
+
+    data =  { "data_point":X_train.loc[selected_id].values.tolist()}
+    st.title('Prédiction du Credit Score')
+
+    data_slice = pd.read_csv('data/X_train_slice.csv')
+    #st.write(data_slice.shape)
+    #st.write(data_slice)
+
+    # 1 customer age
+    age = pd.read_csv('data/1_age.csv')
+
+
+
+
+
+    #selected_id = st.selectbox('Search and select an ID', options=id_list, index=0, format_func=lambda x: x if x else 'Search...')
 
     data =  { "data_point":X_train.loc[selected_id].values.tolist()}
     #st.write(data)
   
     selected_data = X_train.loc[selected_id, selected_columns]
-    st.write('for client', selected_id)
-    st.write(selected_data)
 
-    selected_client_DP = X_train.loc[selected_id, data_category]
+    selected_client_DP = X_train.loc[selected_id, 'DAYS_BIRTH']
+
+    columns = ['TARGET','age','Work_in_years','AMT_INCOME_TOTAL','AMT_CREDIT','CODE_GENDER']
 
     if selected == "Customer View":
-        st.header('Snowflake Healthcare App')
+        st.header('Customer View')
         # Create a row layout
         c1, c2= st.columns(2)
 
@@ -172,88 +234,120 @@ def main():
 
         plot_histogram(data_slice, selected_id, selected_client_DP, data_category)
 
-    elif selected == "Settings":
-        # Select the desired columns from X_train
-        selected_features = X_train[selected_columns]
-        # Print the selected features
-        st.write('selected features', selected_features)
 
-    st.header('Gauge chart')
-    # Create a row layout
-    c1, c2= st.columns(2)
+    elif selected == "Dashboard":
+        c1, c2= st.columns(2)
+        with st.container():
+            c1.write("X")
+            c2.write("Y")
+        with c1:
+            selected_y = st.selectbox('Select Y', options=columns, index=1, format_func=lambda x: x if x else 'Search...')
+        with c2:
+            selected_x = st.selectbox('Select X', options=columns, index=3, format_func=lambda x: x if x else 'Search...')
+        st.write(data_slice)
+        chart_data = pd.DataFrame(data_slice, columns=[selected_y, selected_x])
+        st.write(chart_data)
+        st.scatter_chart(chart_data, x=selected_x, y= selected_y,)
 
-    with st.container():
-        c1.write("c1")
-        c2.write("c2")
+        #bokeh_scatter(chart_data[selected_x], chart_data[selected_y], chart_data['TARGET'])
 
-    with c1:
-        fig = go.Figure(go.Indicator(
-            mode = "gauge+number",
-            value = 0.99,
-            domain = {'x': [0, 1], 'y': [0, 1]},
-            title = {'text': "Risk"}))
-        # Display the figure in Streamlit
-        st.plotly_chart(fig)
+    elif selected == "Scatter Plot":
+        st.write("bokeh scatter here")
+        c1, c2= st.columns(2)
+        with st.container():
+            c1.write("")
+            c2.write("")
+        with c1:
+            selected_x = st.selectbox('Select X', options=columns, index=1, format_func=lambda x: x if x else 'Search...')
+            st.write("x ", selected_x)
+        with c2:
+            selected_y = st.selectbox('Select Y', options=columns, index=3, format_func=lambda x: x if x else 'Search...')
+            st.write("y ", selected_y)
+        
+        #chart_data = pd.DataFrame(data_slice, columns=[selected_y, selected_x, 'TARGET'])
+        #st.scatter_chart(chart_data, x=selected_x, y= selected_y, color='TARGET')
+        bokeh_scatter(data_slice, selected_x, selected_y)
 
-    with c2:
-        fig = go.Figure(go.Indicator(
-            mode = "gauge+number+delta",
-            value = 0.9,
-            domain = {'x': [0, 1], 'y': [0, 1]},
-            title = {'text': "RISK", 'font': {'size': 24}},
-            delta = {'reference': 0.2, 'increasing': {'color': "RebeccaPurple"}},
-            gauge = {
-                'axis': {'range': [None, 1], 'tickwidth': 1, 'tickcolor': "gray"},
-                'bar': {'color': "gray"},
-                'bgcolor': "white",
-                'borderwidth': 2,
-                'bordercolor': "gray",
-                'steps': [
-                    {'range': [0, 0.2], 'color': 'yellowgreen'},
-                    {'range': [0.2, 1], 'color': 'lightcoral'}],
-                'threshold': {
-                    'line': {'color': "red", 'width': 4},
-                    'thickness': 0.75,
-                    'value': 0.2}}))
+    elif selected == "Risk Prediction":
 
-        fig.update_layout(paper_bgcolor = "white", font = {'color': "dimgray", 'family': "Arial"})
-        st.plotly_chart(fig)
+        c1, c2= st.columns(2)
+        with st.container():
+            c1.write("")
+            c2.write("")
 
+        with c1:
+            #c1.write('for client' + selected_id)
+            c1.write(selected_data)
+        with c2:
+            predict_btn = st.button('Prédire')
+            st.write("API endpoint at: ", MLFLOW_URI)
+        
+        
+        if predict_btn:
+            """
+            Function that sends selected client data to a model API and depicts the result
+            """
 
-    predict_btn = st.button('Prédire')
-    if predict_btn:
-        """
-        function that sends data to a model API and depicts the result
-        """
-        #st.write(data)
-        st.write("after")
-        lst = [0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
-    
-        #data_list = [float(i) for i in lst]
-        #data = { "data_point":[[0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]]}
-        #data = { "data_point": data_list}
+            # hard coded example data point
+            #lst = [0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
+        
+            #data_list = [float(i) for i in lst]
+            #data = { "data_point":[[0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]]}
+            #data = { "data_point": data_list}
+                    
+            pred = None
+            threshold = 0.2
+
+            pred = request_prediction(MLFLOW_URI, data)
+            score = 0 if pred["prediction"] < 0.2 else 1
+
+            #st.write(pred["prediction"], " -> score ", score)
+            #st.write('Le score crédit est de {:.2f}'.format(score))
+            
+            col1, col2, col3 = st.columns(3)
+            col1.metric(label= "Score", value= score, delta=(str((score-threshold)/threshold)+" %"), delta_color="normal", help=None, label_visibility="visible")
+            col2.metric("Probability", value=pred["prediction"])
+            col3.metric("Threshold", "0.2")
+
+            #st.header('Gauge chart')
+            # Create a row layout
+            #c1, c2= st.columns(2)
+
+            #with st.container():
+            #    c1.write("")
+            #    c2.write("")
+
+            #with c1:
+            
+
+            #with c2:
+            fig = go.Figure(go.Indicator(
+                mode = "gauge+number+delta",
+                value = pred["prediction"],
+                domain = {'x': [0, 1], 'y': [0, 1]},
+                title = {'text': "RISK PREDICTION", 'font': {'size': 24}},
+                delta = {'reference': 0.2, 'increasing': {'color': "darkred"}},
+                gauge = {
+                    'axis': {'range': [None, 1], 'tickwidth': 1, 'tickcolor': "gray"},
+                    'bar': {'color': "gray"},
+                    'bgcolor': "white",
+                    'borderwidth': 2,
+                    'bordercolor': "gray",
+                    'steps': [
+                        {'range': [0, 0.2], 'color': 'yellowgreen'},
+                        {'range': [0.2, 1], 'color': 'mistyrose'}],
+                    'threshold': {
+                        'line': {'color': "red", 'width': 4},
+                        'thickness': 0.75,
+                        'value': 0.2}}))
+
+            fig.update_layout(paper_bgcolor = "white", font = {'color': "dimgray", 'family': "Arial"})
+            st.plotly_chart(fig)
+            
+            st.write("In green is the area that depicts a low risk, whereas the red area shows predictions with risk.") 
+            st.write("The red line is the threshold that is used to classify wether a client shows risk or not.")
                 
-        pred = None
-
-        st.write(MLFLOW_URI)
-        #st.write(data)
-        threshold = 0.2
-
-        pred = request_prediction(MLFLOW_URI, data)#[0] * 100000
-        score = 0 if pred["prediction"] < 0.2 else 1
-        
-        st.write(pred["prediction"], " -> score ", score)
-
-        st.write(
-            'Le score crédit est de {:.2f}'.format(score))
-        
-        col1, col2, col3 = st.columns(3)
-        col1.metric(label= "Score", value= score, delta=(str((score-threshold)/threshold)+" %"), delta_color="normal", help=None, label_visibility="visible")
-        col2.metric("age", "9 mph", "-8%")
-        col3.metric("Threshold", "86%", "4%")
-
-
-        
+            
 
 if __name__ == '__main__':
     main()
