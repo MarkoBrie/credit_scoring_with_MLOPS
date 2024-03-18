@@ -2,8 +2,8 @@
 FROM python:3.8-bookworm
 
 # copy files to the /app folder in the container
-COPY ./3_STREAMlit_dashboard.py /app/3_STREAMlit_dashboard.py
-COPY ./data /app/data
+COPY ./3_Streamlit_dashboard/3_STREAMlit_dashboard.py /app/3_STREAMlit_dashboard.py
+COPY ./3_Streamlit_dashboard/data /app/data
 
 
 # set the working directory in the container to be /app
