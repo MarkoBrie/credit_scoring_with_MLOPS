@@ -27,12 +27,11 @@ jobs:
         login-server: fastapicd2024.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
-        dockerfile: ./3_Streamlit_dashboard/Dockerfile
      
      
     - name: Build and push container image to registry 
       run: |
-        docker build --file ./3_Streamlit_dashboard/Dockerfile -t fastapicd2024.azurecr.io/dashboard-cd:${{ github.sha }}
+        docker build --file 3_Streamlit_dashboard/Dockerfile -t fastapicd2024.azurecr.io/dashboard-cd:${{ github.sha }}
         docker push fastapicd2024.azurecr.io/dashboard-cd:${{ github.sha }}
         
         
