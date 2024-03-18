@@ -32,7 +32,7 @@ jobs:
      
     - name: Build and push container image to registry 
       run: |
-        docker build ./3_Streamlit_dashboard/Dockerfile -t fastapicd2024.azurecr.io/dashboard-cd:${{ github.sha }}
+        docker build --file ./3_Streamlit_dashboard/Dockerfile -t fastapicd2024.azurecr.io/dashboard-cd:${{ github.sha }}
         docker push fastapicd2024.azurecr.io/dashboard-cd:${{ github.sha }}
         
         
