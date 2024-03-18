@@ -27,6 +27,7 @@ jobs:
         login-server: fastapicd2024.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
+        dockerfile: ./3_Streamlit_dashboard/Dockerfile
      
      
     - name: Build and push container image to registry 
