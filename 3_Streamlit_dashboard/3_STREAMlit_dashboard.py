@@ -314,11 +314,19 @@ def main():
             st.write("feature importance")
             st.write(pred['importance'])
 
-            feature_importance_df = pd.DataFrame({
-                'Feature': feature_name,
-                'Importance': pred['importance']
-            })
-            st.write(feature_importance_df.sort_values(by=['Importance']))
+            feature_importance_df = pd.DataFrame({'Feature': feature_name['0'].tolist(), 'Importance': pred['importance']})
+            FI_sorted = feature_importance_df.sort_values(by=['Importance'], ascending=False)
+            FI_sorted = FI_sorted[:20]
+            st.write(FI_sorted)
+
+
+            fig = go.Figure(go.Bar(
+                x=FI_sorted['Importance'],
+                y=FI_sorted['Feature'],
+                orientation='h'))
+            st.plotly_chart(fig)
+            
+
 
             col1, col2, col3 = st.columns(3)
             col1.metric(label= "Score", value= score, delta=(str((score-threshold)/threshold)+" %"), delta_color="normal", help=None, label_visibility="visible")
