@@ -46,7 +46,7 @@ def predict_credit_score(data: DataPoint):
         }
 
         # TEST data  
-        #data_test = [[0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]]
+        #data_test = [[0.0, 0.0, 1.0, 0.0, 135000.0, 568800.0, 20560.5, 450000.0, 0.01885, 52.71506849315068, -2329.0, -5170.0, -812.0, 9.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0, 2.0, 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7526144906031748, 0.7896543511176771, 0.1595195404777181, 0.066, 0.059, 0.9732, 0.7552, 0.0211, 0.0, 0.1379, 0.125, 0.2083, 0.0481, 0.0756, 0.0505, 0.0, 0.0036, 0.0672, 0.0612, 0.9732, 0.7648, 0.019, 0.0, 0.1379, 0.125, 0.2083, 0.0458, 0.0771, 0.0526, 0.0, 0.0011, 0.0666, 0.059, 0.9732, 0.7585, 0.0208, 0.0, 0.1379, 0.125, 0.2083, 0.0487, 0.0761, 0.0514, 0.0, 0.0031, 0.0392, 0.0, 0.0, 0.0, 0.0, -1740.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]]
         #data = {"data_point": data_test}
         #prediction = sklearn_pyfunc.predict_proba(data_test).max()
             
@@ -55,10 +55,12 @@ def predict_credit_score(data: DataPoint):
         prediction = model.predict_proba([data.data_point]).max()
         # Get feature importances
         importances = model.feature_importances_
+        print(importances)
 
         return {
             'prediction': prediction,
-            'probability': 0.8
+            'probability': 0.8,
+            'importance': importances.tolist()
         }
     except Exception as e:
         error_msg = f"An error occurred during prediction: {str(e)}"

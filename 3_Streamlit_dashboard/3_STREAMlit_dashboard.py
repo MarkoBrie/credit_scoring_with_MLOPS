@@ -62,6 +62,14 @@ with st.sidebar:
         icons=['house', "shield-check",'bar-chart', 'binoculars', 'gear'], menu_icon="cast", default_index=0)
     selected
 
+api_choice = st.sidebar.selectbox(
+        'Choose a model',
+        ['LightGBM', 'XGB in progress', 'XGboost in progress'])
+
+api_location = st.sidebar.selectbox(
+        'Choose a model',
+        ['AZURE', 'local'])
+    
 def request_prediction(model_uri: str, data: dict) -> dict:
     """
     Function to request a prediction from a deployed model.
@@ -145,8 +153,15 @@ def plot_histogram(data, id, age, category):
 
 def main():
     MLFLOW_URI = 'https://fastapi-cd-webapp.azurewebsites.net/predict'
-    #MLFLOW_URI = 'http://0.0.0.0:8000/predict'
+    MLFLOW_URI_local = 'http://0.0.0.0:8000/predict'
     
+    if api_location == 'local' :
+        MLFLOW_URI = MLFLOW_URI_local
+    else:
+        MLFLOW_URI = MLFLOW_URI
+
+
+
     ids_test = pd.read_csv('data/test_ids.csv')
     id_list = ids_test.iloc[:,0].values.tolist()
 
@@ -174,9 +189,6 @@ def main():
     X_train[int_columns] = X_train[int_columns].astype('float')
 
 
-    api_choice = st.sidebar.selectbox(
-        'Choose a model',
-        ['LightGBM', 'XGB in progress', 'XGboost in progress'])
     
     data_category = st.sidebar.selectbox(
         'Quelle donnée souhaitez vous étudier',
@@ -199,10 +211,6 @@ def main():
 
     # 1 customer age
     age = pd.read_csv('data/1_age.csv')
-
-
-
-
 
     #selected_id = st.selectbox('Search and select an ID', options=id_list, index=0, format_func=lambda x: x if x else 'Search...')
 
@@ -292,7 +300,7 @@ def main():
             #lst = [0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]
         
             #data_list = [float(i) for i in lst]
-            #data = { "data_point":[[0, 0, 1, 1, 63000.0, 310500.0, 15232.5, 310500.0, 0.026392, 16263, -214.0, -8930.0, -573, 0.0, 1, 1, 0, 1, 1, 0, 2.0, 2, 2, 11, 0, 0, 0, 0, 1, 1, 0.0, 0.0765011930557638, 0.0005272652387098, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, True, False, False, False, False, False, False, False, True, False, False, False, False, False, False, True, False, False, False, False, True, False, False, False, True, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, True, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False, False]]}
+            #data = { "data_point":[[0.0, 0.0, 1.0, 0.0, 135000.0, 568800.0, 20560.5, 450000.0, 0.01885, 52.71506849315068, -2329.0, -5170.0, -812.0, 9.0, 1.0, 1.0, 0.0, 1.0, 0.0, 1.0, 2.0, 2.0, 2.0, 18.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.7526144906031748, 0.7896543511176771, 0.1595195404777181, 0.066, 0.059, 0.9732, 0.7552, 0.0211, 0.0, 0.1379, 0.125, 0.2083, 0.0481, 0.0756, 0.0505, 0.0, 0.0036, 0.0672, 0.0612, 0.9732, 0.7648, 0.019, 0.0, 0.1379, 0.125, 0.2083, 0.0458, 0.0771, 0.0526, 0.0, 0.0011, 0.0666, 0.059, 0.9732, 0.7585, 0.0208, 0.0, 0.1379, 0.125, 0.2083, 0.0487, 0.0761, 0.0514, 0.0, 0.0031, 0.0392, 0.0, 0.0, 0.0, 0.0, -1740.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0]]}
             #data = { "data_point": data_list}
                     
             pred = None
@@ -303,7 +311,15 @@ def main():
 
             #st.write(pred["prediction"], " -> score ", score)
             #st.write('Le score crédit est de {:.2f}'.format(score))
-            
+            st.write("feature importance")
+            st.write(pred['importance'])
+
+            feature_importance_df = pd.DataFrame({
+                'Feature': feature_name,
+                'Importance': pred['importance']
+            })
+            st.write(feature_importance_df.sort_values(by=['Importance']))
+
             col1, col2, col3 = st.columns(3)
             col1.metric(label= "Score", value= score, delta=(str((score-threshold)/threshold)+" %"), delta_color="normal", help=None, label_visibility="visible")
             col2.metric("Probability", value=pred["prediction"])
