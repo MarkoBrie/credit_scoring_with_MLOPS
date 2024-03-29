@@ -18,7 +18,7 @@ RUN pip install streamlit_option_menu
 RUN pip install requests
 RUN pip install matplotlib
 RUN pip install seaborn 
-RUN pip install bokeh
+RUN pip install bokeh==2.4.3
 RUN pip install plotly
 
 # expose the port that uvicorn will run the app on
